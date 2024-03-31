@@ -1,22 +1,15 @@
-import React from 'react';
-import './App.css';
-import Header from './Header';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from './Login';
-import Register from './Register';
+// import "bootstrap/dist/css/bootstrap.min.css";
+import AuthUser from './components/AuthUser';
+import Guest from './navbar/guest';
+import Auth from './navbar/auth';
 
 function App() {
+  const {getToken} = AuthUser();
+  if(!getToken()){
+    return <Guest />
+  }
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Header />
-        <h1>Transaction</h1>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+      <Auth />
   );
 }
 
