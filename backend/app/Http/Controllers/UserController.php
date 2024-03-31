@@ -9,10 +9,16 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login','register']]);
     }
+
+
+
+    // <!---------------- CLIENT -------------- -->
+
     public function register(request $request)
     {
         $register = new User;

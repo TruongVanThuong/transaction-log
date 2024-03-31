@@ -17,12 +17,12 @@
       <div class="menu-title">Dashboard</div>
     </a>
     <ul>
-      <li> <a href="index.html"><i class="bx bx-right-arrow-alt"></i>Default</a>
+      <li> <a href="/role"><i class="bx bx-right-arrow-alt"></i>Role</a>
       </li>
-      <li> <a href="index2.html"><i class="bx bx-right-arrow-alt"></i>Alternate</a>
+      <li> <a href="/managerAccount"><i class="bx bx-right-arrow-alt"></i>Account</a>
       </li>
-      <li> <a href="index3.html"><i class="bx bx-right-arrow-alt"></i>Graphical</a>
-      </li>
+      {{-- <li> <a href="index3.html"><i class="bx bx-right-arrow-alt"></i>Graphical</a>
+      </li> --}}
     </ul>
   </li>
   <li>

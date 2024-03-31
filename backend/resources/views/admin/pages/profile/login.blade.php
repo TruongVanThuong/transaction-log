@@ -39,7 +39,7 @@
           <div class="col mx-auto">
             <div class="mb-4 text-center">
               <div class="d-flex justify-content-center align-items-center">
-                <img src="/assets_admin/images/icon-admin.jpeg" class="logo-icon" alt="logo icon" style="width: 70px;">
+                <img src="/assets/images/icon-admin.jpeg" class="logo-icon" alt="logo icon" style="width: 70px;">
                 <h3 class="logo-text"></h3>
               </div>
             </div>
@@ -101,7 +101,7 @@
     var password = $('input[name="password"]').val();
     console.log(email, password)
     $.ajax({
-      url: "{{ asset('/admin/login-access') }}",
+      url: "/login-access",
       type: "post",
       data: {
         email: email,
@@ -113,7 +113,7 @@
           toastr.success(res.message);
           this.dang_nhap = {};
           setTimeout(() => {
-            window.location.href = "/admin";
+            window.location.href = "/";
           }, 1000); // Delay for 2 seconds (2000 milliseconds)
         } else {
           toastr.warning(res.message);

@@ -46,6 +46,7 @@
 
   <!-- SCRIPT -->
   @include('admin.shares.js')
+  @yield('js')
 </body>
 
 </html>

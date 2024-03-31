@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->integer('phone');
             $table->string('address');
             $table->integer('role');
-            $table->integer('wallet');
+            $table->integer('wallet')->nullable();
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();
