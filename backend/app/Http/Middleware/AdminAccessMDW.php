@@ -19,7 +19,7 @@ class AdminAccessMDW
         $check = Auth::guard('users')->check();
         if($check) {
             $user = Auth::guard('users')->user();
-            if($user->role > 3) {
+            if($user->role > 3 && $user->role < 1) {
                 // toastr()->error('Tài khoản của bạn không đủ quyền truy cập!');
                 return redirect('/login');
             }

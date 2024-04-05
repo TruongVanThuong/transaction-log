@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ShopController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -19,11 +23,62 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('register',[UserController::class, 'register']);
-Route::post('login',[UserController::class, 'login']);
+Route::group([
+    'middleware' => 'api',
+], function ($router) {
 
-Route::group(['middleware'=>'api'],function(){
-    Route::post('logout', [UserController::class,'logout']);
-    Route::post('refresh', [UserController::class,'refresh']);
-    Route::post('me', [UserController::class,'me']);
+    Route::post('/register', [UserController::class, 'register']);
+    Route::post('login', [UserController::class, 'login']);
+    Route::post('logout', 'AuthController@logout');
+
+});
+
+
+// middleware AdminAccessMDW ============
+Route::middleware(['AdminAccessMDW'])->group(function () {
+    Route::post('refresh', 'AuthController@refresh');
+    Route::post('me', 'AuthController@me');
+
+    Route::group(["prefix" => "/admin"], function() {
+        Route::group(["prefix" => "/product"], function() {
+            Route::post('/', [ProductController::class, 'index']);
+            Route::get('/show',[ProductController::class, 'prdShow']);
+            Route::get('/edit/{id}',[ProductController::class, 'prdEdit']);
+            Route::post('/update/{id}',[ProductController::class, 'prdUpdate']);
+            Route::delete('/delete/{id}',[ProductController::class, 'prdDelete']);
+        });
+
+        Route::controller(CategoryController::class)->group(function () {
+            Route::group(["prefix" => "/category"], function() {
+                Route::get('/', 'cateShow');
+                Route::post('/add', 'cateAdd');
+                Route::get('/edit/{id}', 'cateEdit');
+                Route::put('/update/{id}', 'cateUpdate');
+                Route::delete('/delete/{id}', 'cateDelete');
+            });
+        });
+
+        Route::controller(RoleController::class)->group(function () {
+            Route::group(["prefix" => "/role"], function() {
+                Route::get('/', 'roleShow');
+                Route::post('/add', 'roleAdd');
+                Route::get('/edit/{id}', 'roleEdit');
+                Route::put('/update/{id}', 'roleUpdate');
+                Route::delete('/delete/{id}', 'roleDelete');
+            });
+        });
+    });
+});
+// END middleware AdminAccessMDW ============
+
+
+
+
+
+
+
+Route::controller(ShopController::class)->group(function () {
+    Route::group(["prefix" => "/shop"], function() {
+        Route::get('/', 'shopShow');
+    });
 });

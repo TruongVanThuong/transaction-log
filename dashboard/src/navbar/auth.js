@@ -3,12 +3,13 @@ import Home from '../components/home';
 import Dashboard from '../components/dashboard';
 import AuthUser from '../components/AuthUser';
 function Auth() {
-    const {token,logout} = AuthUser();
+    const { authUser, logout } = AuthUser();
+
     const logoutUser = () => {
-        if(token != undefined){
-            logout();
+        if (authUser) {
+        logout();
         }
-    }
+    };
     return (
         <>
             <nav className="navbar navbar-expand-sm navbar-dark bg-dark">

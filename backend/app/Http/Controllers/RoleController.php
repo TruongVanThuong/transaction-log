@@ -9,16 +9,14 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
-    public function showRole() {
-        $data_role = RoleModel::all();
-        $compact = compact('data_role');
-
-        return response()->json($compact);
+    public function roleShow() {
+        $data = RoleModel::all();
+        return $data;
     }
 
-    public function addRole(CreateRoleRQ $request) {
+    public function roleAdd(CreateRoleRQ $request) {
         $data = $request->all();
-        RoleModel::create($data);
+        // RoleModel::create($data);
 
         return response()->json([
             'status' => true,
@@ -26,7 +24,13 @@ class RoleController extends Controller
         ]);
     }
 
-    public function editRole(EditRoleRQ $request) {
+    public function roleEdit($id) {
+        $data = RoleModel::find($id);
+        return $data;
+    }
+
+    public function roleUpdate(Request $request, $id)
+    {
         $data = $request->all();
         $editRole = RoleModel::where('id', $request->id)->first();
         $editRole->update($data);
@@ -37,7 +41,7 @@ class RoleController extends Controller
         ]);
     }
 
-    public function deleteRole(Request $request)
+    public function roleDelete(Request $request)
     {
         RoleModel::where('id', $request->id)->delete();
         return response()->json([

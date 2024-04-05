@@ -1,16 +1,42 @@
 import { useState } from "react"
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import AuthUser from './AuthUser';
 
 export default function Login() {
-    const {http,setToken} = AuthUser();
+
     const [email,setEmail] = useState();
     const [password,setPassword] = useState();
+    const navigate = useNavigate();
+    const { setAuthUser } = AuthUser();
 
-    const submitForm = () =>{
-        // api call
-        http.post('/login',{email:email,password:password}).then((res)=>{
-            setToken(res.data.user,res.data.access_token);
-        })
+    const submitForm = async (e) =>{
+        e.preventDefault();
+        let item = {email,password}
+        try {
+            const response = await fetch('http://localhost:8001/api/login', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(item)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setAuthUser(data.user);
+                console.log('Logged in user:', data.user);
+                toast.success('Đăng nhập thành công!');   
+            } else {
+                console.error('Đã xảy ra lỗi:  else');
+                toast.error('Đăng nhập thất bại! Vui lòng thử lại.');
+            }
+        } catch (error) {
+            console.error('Đã xảy ra lỗi:', error);
+            toast.error('Đã xảy ra lỗi khi đăng nhập. Vui lòng thử lại sau.');
+        }
+        navigate('/');
     }
 
     return(
