@@ -4,7 +4,7 @@ import AuthUser from './AuthUser';
 
 export default function Register() {
     const navigate = useNavigate();
-    const {http,setToken} = AuthUser();
+    const {http} = AuthUser();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

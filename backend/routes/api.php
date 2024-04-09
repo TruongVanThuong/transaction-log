@@ -92,6 +92,22 @@ Route::group(["prefix" => "/admin"], function () {
                 Route::post('/update/{id}', 'tranUpdate');
             });
         });
+
+        Route::controller(OrderController::class)->group(function () {
+            Route::group(["prefix" => "/order"], function () {
+                Route::get('/', 'orderShow');
+                Route::get('/edit/{id}', 'orderEdit');
+                Route::post('/update/{id}', 'orderUpdate');
+            });
+        });
+
+        Route::controller(TransactionController::class)->group(function () {
+            Route::group(["prefix" => "/transaction"], function () {
+                Route::get('/', 'tranShow');
+                Route::get('/edit/{id}', 'tranEdit');
+                Route::post('/update/{id}', 'tranUpdate');
+            });
+        });
     });
 });
 // });

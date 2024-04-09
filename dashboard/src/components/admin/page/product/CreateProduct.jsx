@@ -1,11 +1,15 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 // import {useNavigate} from 'react-router-dom'
+import AuthUser from '../../../AuthUser';
+
 
 const endpoint = 'http://localhost:8001/api/admin/product'
 
 const CreateProduct = () => {
     const [categories, setCategories] = useState([]);
+    const { authUser } = AuthUser();
+    const idUser = authUser.id;
 
     useEffect(() => {
         getAllCategories();
@@ -20,7 +24,6 @@ const CreateProduct = () => {
     const [name_pd, setName] = useState('')
     const [image, setImage] = useState(null)
     const [category_id, setCategory_id] = useState('')
-    const [qly, setQly] = useState('')
     const [price, setPrice] = useState('')
     const [expiration_date, setExpirationDate] = useState('')
 
@@ -30,7 +33,6 @@ const CreateProduct = () => {
         name_pd: name_pd,
         image: image,
         category_id: category_id,
-        qly: qly,
     })
 
     const handleFileChange = (e) => {
@@ -44,9 +46,9 @@ const CreateProduct = () => {
         formData.append('name_pd', name_pd);
         formData.append('image', image);
         formData.append('category_id', category_id);
-        formData.append('qly', qly);
         formData.append('price', price);
         formData.append('expiration_date', expiration_date);
+        formData.append('seller_id', idUser);
 
         try {
             await axios.post(endpoint, formData, {
@@ -82,12 +84,6 @@ const CreateProduct = () => {
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">image</label>
                             <input onChange={handleFileChange} type="file"
                                 id="image" className="form-control" required/>
-                        </div>
-                        <div className="mb-6 form-group">
-                            <label htmlFor="qly"
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantity</label>
-                            <input value={qly} onChange={(e) => setQly(e.target.value)} type="text"
-                                id="qly" className="form-control" required/>
                         </div>
                             <div className="mb-6 form-group">
                                 <label htmlFor="category_id"

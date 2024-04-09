@@ -17,7 +17,7 @@ class ProductModel extends Model
         'image',
         'category_id',
         'price',
-        'qly',
+        'qty',
         'desc',
         'status',
         'expiration_date',
