@@ -17,10 +17,11 @@ return new class extends Migration
             $table->tinyInteger('seller_id');
             $table->tinyInteger('category_id');
             $table->integer('price');
-            $table->integer('qly');
+            $table->string('image');
+            $table->integer('qty');
             $table->text('desc');
             $table->boolean('status');
-            $table->softDeletes();
+            $table->dateTime('expiration_date');
             $table->timestamps();
         });
     }

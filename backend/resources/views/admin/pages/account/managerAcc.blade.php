@@ -4,7 +4,6 @@ MANAGER ACCOUNT
 @endsection
 @section('noi_dung')
 <!-- HTML -->
-<div class="row" id="app">
 
     <div class="row" id="app" v-cloak>
 
@@ -25,24 +24,22 @@ MANAGER ACCOUNT
             <div class="card-body">
               <div class="table-responsive">
                 <table id="table_id" class="table table-bordered">
-                  <thead clas="bg-primary">
+                  <thead class="bg-primary">
                     <tr>
                       <th class="text-center">ID</th>
                       <th class="text-center">Tên Tài Khoản</th>
                       <th class="text-center">Email</th>
-                      <th class="text-center">Vai Trò</th>
+                      <th class="text-center">Role</th>
                       <th class="text-center">Thao Tác</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr  style="border: 1px solid #000;" v-for="(taikhoan, key) in data_taikhoan" v-if="taikhoan.loai_tai_khoan > 1 && taikhoan.loai_tai_khoan < (TaiKhoanDangNhap.loai_tai_khoan == 4 ? 4 : 5)">
-                      <th style="border: 1px solid #000;"class="align-middle text-center">@{{ taikhoan.id }}</th>
-                      <td style="border: 1px solid #000;" class="align-middle text-center">@{{ taikhoan.ten_tai_khoan }}</td>
+                    <tr  style="border: 1px solid #000;" v-for="(taikhoan, key) in data_acc">
+                      <th style="border: 1px solid #000;"class="align-middle text-center">@{{ key + 1 }}</th>
+                      <td style="border: 1px solid #000;" class="align-middle text-center">@{{ taikhoan.name }}</td>
                       <td style="border: 1px solid #000;" class="align-middle text-center">@{{ taikhoan.email }}</td>
-                      <td style="border: 1px solid #000;" class="align-middle text-center">
-                        <span :class="getMauPhanQuyen(taikhoan.loai_tai_khoan)">
-                          @{{ getTenPhanQuyen(taikhoan.loai_tai_khoan) }}
-                        </span>
+                      <td style="border: 1px solid #000;" class="align-middle text-center" v-for="(role, key) in data_role" v-if="role.number_role == taikhoan.role">
+                        @{{ role.name_role }}
                       </td>
                       <td style="border: 1px solid #000;" class="align-middle text-center text-nowrap">
                         <!-- Button trigger modal -->
@@ -67,64 +64,50 @@ MANAGER ACCOUNT
                         <div class="modal-body">
                           <div class="form-group mt-3">
                             <label>Họ và tên</label>
-                            <input v-model="add_user.ten_tai_khoan" type="text" class="form-control"
+                            <input v-model="add.name" type="text" class="form-control"
                               placeholder="Nhập vào Họ và tên">
-                            <div v-if="errors.ten_tai_khoan" class="alert alert-warning">
-                              @{{ errors.ten_tai_khoan[0] }}
+                            <div v-if="errors.name" class="alert alert-warning">
+                              @{{ errors.name[0] }}
                             </div>
                           </div>
                           <div class="form-group mt-3">
                             <label>Email</label>
-                            <input v-model="add_user.email" type="email" class="form-control" placeholder="Nhập vào email">
+                            <input v-model="add.email" type="email" class="form-control" placeholder="Nhập vào email">
                             <div v-if="errors.email" class="alert alert-warning">
                               @{{ errors.email[0] }}
                             </div>
                           </div>
                           <div class="form-group mt-3">
-                            <label>Ảnh Sản Phẩm</label>
-                            <div class="input-group">
-                                <input id="hinh_anh" class="form-control" type="text" name="filepath">
-                                <span class="input-group-prepend">
-                                    <a id="lfm" data-input="hinh_anh" data-preview="holder" class="btn btn-primary">
-                                        <i class="fa fa-picture-o"></i> Choose
-                                    </a>
-                                </span>
-                            </div>
-                            <div id="holder" style="margin-top:15px;max-height:100px;"></div>
-                        </div>
-                          <div class="form-group mt-3">
                             <label>Số điện thoại</label>
-                            <input v-model="add_user.so_dien_thoai" type="text" class="form-control"
+                            <input v-model="add.phone" type="text" class="form-control"
                               placeholder="Nhập vào số điện thoại">
-                            <div v-if="errors.so_dien_thoai" class="alert alert-warning">
-                              @{{ errors.so_dien_thoai[0] }}
+                            <div v-if="errors.phone" class="alert alert-warning">
+                              @{{ errors.phone[0] }}
                             </div>
                           </div>
                           <div class="form-group mt-3">
                             <label>Địa chỉ</label>
-                            <input v-model="add_user.dia_chi" type="text" class="form-control" placeholder="Nhập vào địa chỉ">
-                            <div v-if="errors.dia_chi" class="alert alert-warning">
-                              @{{ errors.dia_chi[0] }}
+                            <input v-model="add.address" type="text" class="form-control" placeholder="Nhập vào địa chỉ">
+                            <div v-if="errors.address" class="alert alert-warning">
+                              @{{ errors.address[0] }}
                             </div>
                           </div>
                           <div class="form-group mt-3">
                             <label>Loại tài khoản</label>
-                            <select v-model="add_user.loai_tai_khoan" class="form-control">
-                              <!-- <div v-if="TaiKhoanDangNhap.loai_tai_khoan == 4 || TaiKhoanDangNhap.loai_tai_khoan == 5"> -->
-                                <option v-for="(phanquyen, index) in data_phanquyen"
-                                  v-if="phanquyen.role_phan_quyen > 1 && phanquyen.role_phan_quyen < (TaiKhoanDangNhap.loai_tai_khoan == 4 ? 4 : 5)"
-                                  :value="phanquyen.role_phan_quyen">
-                                  @{{ phanquyen.ten_phan_quyen }}
+                            <select v-model="add.role" class="form-control">
+                                <option v-for="(role, index) in data_role"
+                                  v-if="role.number_role > 1"
+                                  :value="role.number_role">
+                                  @{{ role.name_role }}
                                 </option>
-                              <!-- </div> -->
                             </select>
-                            <div v-if="errors.loai_tai_khoan" class="alert alert-warning">
-                              @{{ errors.loai_tai_khoan[0] }}
+                            <div v-if="errors.role" class="alert alert-warning">
+                              @{{ errors.role[0] }}
                             </div>
                           </div>
                           <div class="form-group mt-3">
                             <label>Mật khẩu</label>
-                            <input v-model="add_user.password" type="password" class="form-control"
+                            <input v-model="add.password" type="password" class="form-control"
                               placeholder="Nhập vào mật khẩu">
                             <div v-if="errors.password" class="alert alert-warning">
                               @{{ errors.password[0] }}
@@ -132,10 +115,10 @@ MANAGER ACCOUNT
                           </div>
                           <div class="form-group mt-3">
                             <label>Mật khẩu</label>
-                            <input v-model="add_user.nhap_lai_password" type="password" class="form-control"
+                            <input v-model="add.again_password" type="password" class="form-control"
                               placeholder="Nhập lại mật khẩu">
-                            <div v-if="errors.nhap_lai_password" class="alert alert-warning">
-                              @{{ errors.nhap_lai_password[0] }}
+                            <div v-if="errors.again_password" class="alert alert-warning">
+                              @{{ errors.again_password[0] }}
                             </div>
                           </div>
 
@@ -160,62 +143,47 @@ MANAGER ACCOUNT
                         <div class="modal-body">
                           <div class="form-group mt-3">
                             <label>Họ và tên</label>
-                            <input v-model="edit_user.ten_tai_khoan" type="text" class="form-control"
+                            <input v-model="edit.name" type="text" class="form-control"
                               placeholder="Nhập vào Họ và tên">
-                            <div v-if="errors.ten_tai_khoan" class="alert alert-warning">
-                              @{{ errors.ten_tai_khoan[0] }}
+                            <div v-if="errors.name" class="alert alert-warning">
+                              @{{ errors.name[0] }}
                             </div>
                           </div>
                           <div class="form-group mt-3">
                             <label>Email</label>
-                            <input v-model="edit_user.email" type="email" class="form-control" placeholder="Nhập vào email" disabled>
+                            <input v-model="edit.email" type="email" class="form-control" placeholder="Nhập vào email" disabled>
                             <div v-if="errors.email" class="alert alert-warning">
                               @{{ errors.email[0] }}
                             </div>
                           </div>
                           <div class="form-group mt-3">
-                            <label>Hình </label>
-                            <div class="input-group">
-                                <input id="hinh_anh_update" class="form-control" type="text" name="filepath">
-                                <span class="input-group-prepend">
-                                    <a id="lfm_update" data-input="hinh_anh_update" data-preview="holder_update" class="btn btn-primary">
-                                        <i class="fa fa-picture-o"></i> Choose
-                                    </a>
-                                </span>
-                            </div>
-                            <div id="holder_update" style="margin-top:15px; max-height:100px;">
-                            </div>
-                          </div>
-                          <div class="form-group mt-3">
                             <label>Số điện thoại</label>
-                            <input v-model="edit_user.so_dien_thoai" type="text" class="form-control"
+                            <input v-model="edit.phone" type="text" class="form-control"
                               placeholder="Nhập vào số điện thoại">
-                            <div v-if="errors.so_dien_thoai" class="alert alert-warning">
-                              @{{ errors.so_dien_thoai[0] }}
+                            <div v-if="errors.phone" class="alert alert-warning">
+                              @{{ errors.phone[0] }}
                             </div>
                           </div>
                           <div class="form-group mt-3">
                             <label>Địa chỉ</label>
-                            <input v-model="edit_user.dia_chi" type="text" class="form-control"
+                            <input v-model="edit.address" type="text" class="form-control"
                               placeholder="Nhập vào địa chỉ">
-                            <div v-if="errors.dia_chi" class="alert alert-warning">
-                              @{{ errors.dia_chi[0] }}
+                            <div v-if="errors.address" class="alert alert-warning">
+                              @{{ errors.address[0] }}
                             </div>
                           </div>
                           <div class="form-group mt-3">
                             <label>Loại tài khoản</label>
-                            <select v-model="edit_user.loai_tai_khoan" class="form-control">
-                              <div v-if="TaiKhoanDangNhap.loai_tai_khoan == 4 || TaiKhoanDangNhap.loai_tai_khoan == 5">
-                                <option v-for="(phanquyen, index) in data_phanquyen"
-                                  v-if="phanquyen.role_phan_quyen > 1 && phanquyen.role_phan_quyen < (TaiKhoanDangNhap.loai_tai_khoan == 4 ? 4 : 5)"
-                                  :value="phanquyen.role_phan_quyen"
-                                  :checked="phanquyen.role_phan_quyen === edit_user.loai_tai_khoan">
-                                  @{{ phanquyen.ten_phan_quyen }}
+                            <select v-model="edit.role" class="form-control">
+                                <option v-for="(role, index) in data_role"
+                                  v-if="role.number_role > 1"
+                                  :value="role.number_role"
+                                  :checked="role.number_role === edit.role">
+                                  @{{ role.name_role }}
                                 </option>
-                              </div>
                             </select>
-                            <div v-if="errors.loai_tai_khoan" class="alert alert-warning">
-                              @{{ errors.loai_tai_khoan[0] }}
+                            <div v-if="errors.role" class="alert alert-warning">
+                              @{{ errors.role[0] }}
                             </div>
                           </div>
 
@@ -259,7 +227,6 @@ MANAGER ACCOUNT
           </div>
         </div>
 
-</div>
 
 <!-- END HTML -->
 @endsection
@@ -271,14 +238,12 @@ MANAGER ACCOUNT
       el: '#app',
       data: {
         errors: {},
-        add_user: {
-          loai_tai_khoan: 2,
-        },
-        edit_user: {},
+        add: {},
+        edit: {},
         xoa: {},
-        data_taikhoan: [],
-        data_phanquyen: [],
-        TaiKhoanDangNhap: {},
+        data_acc: [],
+        data_role: [],
+        // login: {},
       },
       created() {
         this.GetData();
@@ -288,34 +253,16 @@ MANAGER ACCOUNT
         // hien thi danh sach tai khoan
         GetData() {
           axios
-            .get('/admin/account/show')
+            .get('/managerAccount/show')
             .then((res) => {
-              this.data_taikhoan = res.data.data_taikhoan;
-              this.data_phanquyen = res.data.data_phanquyen;
-              this.TaiKhoanDangNhap = res.data.TaiKhoanDangNhap;
+              this.data_acc = res.data.data_acc;
+              this.data_role = res.data.data_role;
+            //   this.login = res.data.login;
             });
         },
 
         cap_nhat(taikhoan) {
-          $("#hinh_anh_update").val(taikhoan.hinh_anh);
-          var text = '<img src="'+ taikhoan.hinh_anh + '" style="margin-top:15px;max-height:100px;">'
-          $("#holder_update").html(text);
-          this.edit_user = taikhoan; // Tạo một bản sao của user để tránh ảnh hưởng trực tiếp đến dữ liệu người dùng
-        },
-
-        getTenPhanQuyen(rolePhanQuyen) {
-          switch (rolePhanQuyen) {
-            case 2:
-              return 'Nhân Viên Bán Hàng';
-            case 3:
-              return 'Nhân Viên Đăng Bài';
-            case 4:
-              return 'Quản Lý Nhân Viên';
-            case 5:
-              return 'Quản trị Viên';
-            default:
-              return 'Không xác định';
-          }
+          this.edit = taikhoan;
         },
 
         getMauPhanQuyen(rolePhanQuyen) {
@@ -334,65 +281,55 @@ MANAGER ACCOUNT
         },
 
         them_nguoi_dung() {
-          this.add_user.hinh_anh = $("#hinh_anh").val();
+          this.add.hinh_anh = $("#hinh_anh").val();
           axios
-            .post('/admin/quan-ly-nhan-vien/them-nhan-vien', this.add_user)
+            .post('/managerAccount/add', this.add)
             .then((res) => {
-
-              if (res.data.status) {
-                toastr.success(res.data.message);
-                this.GetData();
-                this.add_user = {};
-                $("#hinh_anh").val("");
-                // Tắt modal xác nhận
-                $('#exampleModal').modal('hide');
-              } else {
-                toastr.error('Có lỗi không mong muốn!');
-              }
+                if (res.data.status) {
+                    toastr.success(res.data.message);
+                    this.GetData();
+                    this.add = {};
+                    $("#hinh_anh").val("");
+                    // Tắt modal xác nhận
+                    $('#exampleModal').modal('hide');
+                } else {
+                    toastr.error('Có lỗi không mong muốn!');
+                }
             })
             .catch((error) => {
-              if (error && error.response.data && error.response.data.errors) {
-                this.errors = error.response.data.errors;
-              } else {
-                toastr.error('Có lỗi không mong muốn!');
-              }
+                if (error && error.response.data && error.response.data.errors) {
+                    this.errors = error.response.data.errors;
+                } else {
+                    toastr.error('Có lỗi không mong muốn!');
+                }
             })
         },
 
         cap_nhat_nguoi_dung() {
-          this.edit_user.hinh_anh = $("#hinh_anh_update").val();
           axios
-            .post('/admin/quan-ly-nhan-vien/cap-nhat-nhan-vien', this.edit_user)
+            .post('/managerAccount/edit', this.edit)
             .then((res) => {
-              if (res.data.status) {
-                toastr.success(res.data.message);
-                this.GetData();
-                // Tắt modal xác nhận
-                $('#exampleModalEidt').modal('hide');
-              } else {
-                toastr.error('Có lỗi không mong muốn! 1');
-              }
+                if (res.data.status) {
+                    toastr.success(res.data.message);
+                    this.GetData();
+                    // Tắt modal xác nhận
+                    $('#exampleModalEidt').modal('hide');
+                } else {
+                    toastr.error('Có lỗi không mong muốn! 1');
+                }
             })
             .catch((error) => {
-              if (error.response) {
-                  // Đối tượng error.response chứa thông tin lỗi từ server
-                  console.error('Server error:', error.response.data);
-                  toastr.error('Server error. Xem console log để biết chi tiết.');
-              } else if (error.request) {
-                  // Đối tượng error.request chứa thông tin về request gửi lên server
-                  console.error('Request error:', error.request);
-                  toastr.error('Request error. Xem console log để biết chi tiết.');
-              } else {
-                  // Các lỗi khác
-                  console.error('Error:', error.message);
-                  toastr.error('Có lỗi không mong muốn! ' + error.message);
-              }
+                if (error && error.response.data && error.response.data.errors) {
+                    this.errors = error.response.data.errors;
+                } else {
+                    toastr.error('Có lỗi không mong muốn!');
+                }
           });
         },
 
         xoa_nguoi_dung() {
           axios
-            .post('/admin/quan-ly-nhan-vien/xoa-nhan-vien', this.xoa)
+            .post('/managerAccount/delete', this.xoa)
             .then((res) => {
               if (res.data.status) {
                 const message = "Dữ liệu đã được xoá thành công!";
@@ -408,19 +345,6 @@ MANAGER ACCOUNT
       }
     });
   </script>
-
-  <script>
-    var route_prefix = "/laravel-filemanager";
-  </script>
-  <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
-  <script>
-    $("#lfm").filemanager('image', {prefix : route_prefix});
-    $("#lfm_update").filemanager('image', {prefix : route_prefix});
-  </script>
-
-  {{--  --}}
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-  <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 
   <script>
     $(document).ready(function () {

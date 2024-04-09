@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->tinyInteger('buyer_id');
-            $table->integer('total');
-            $table->text('note');
-            $table->boolean('status')->default(1);
+            $table->tinyInteger('product_id');
+            $table->integer('qty');
+            $table->text('note')->nullable();
+            $table->string('status')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

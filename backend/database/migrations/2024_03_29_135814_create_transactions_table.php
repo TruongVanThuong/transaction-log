@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('order_id');
+            $table->tinyInteger('product_id');
             $table->tinyInteger('buyer_id');
             $table->tinyInteger('seller_id');
             $table->tinyInteger('intermediary_id');
-            $table->integer('amount');
-            $table->boolean('status');
+            $table->string('note')->nullable();
+            $table->integer('qty');
+            $table->string('status')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

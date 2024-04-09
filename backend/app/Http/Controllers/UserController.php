@@ -5,15 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 
 class UserController extends Controller
 {
+
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
-    public function register(request $request)
+
+
+
+    // <!---------------- CLIENT -------------- -->
+
+    public function register(Request $request)
     {
         $register = new User;
         $register->name = $request->input('name');
@@ -21,36 +28,27 @@ class UserController extends Controller
         $register->password = bcrypt($request->input('password'));
         $register->phone = $request->input('phone');
         $register->address = $request->input('address');
-        $register->role = $request->input('role');
+        $register->role = 4;
         $register->wallet = $request->input('wallet');
 
         $register->save();
         return $register;
     }
 
-    public function login()
+    public function login(Request $request)
     {
-        $login = request(['email', 'password']);
-
-        // if (! $token = auth()->attempt($login)) {
-        //     return response()->json(['error' => 'Unauthorized'], 401);
-        // }
-        $kiem_tra = auth()->attempt($login);
-        // dd($kiem_tra);
+        $login['email'] = $request->email;
+        $login['password'] = $request->password;
+        $kiem_tra = Auth::guard('users')->attempt($login);
         if ($kiem_tra) {
-            return $this->respondWithToken($kiem_tra);
-            // return response()->json([
-            //     'status' => true,
-            //     'message' => 'Đăng nhập thành công',
-            // ]);
+            $tai_khoan = Auth::guard('users')->user();
+            return response()->json([
+                // 'token' => $tai_khoan->createToken('authToken'),
+                'user' => $tai_khoan
+            ]);
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);
-            // return response()->json([
-            //     'status' => false,
-            //     'message' => 'Tài khoản hoặc mật khẩu không đúng',
-            // ]);
         }
-
 
     }
 
@@ -73,6 +71,7 @@ class UserController extends Controller
 
     protected function respondWithToken($token)
     {
+
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',

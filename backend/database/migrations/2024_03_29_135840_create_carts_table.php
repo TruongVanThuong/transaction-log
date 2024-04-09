@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->tinyInteger('user_id');
             $table->tinyInteger('product_id');
-            $table->integer('qly');
-            $table->softDeletes();
+            // $table->integer('qly');
+            // $table->softDeletes();
             $table->timestamps();
         });
     }
