@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function AuthUser(){
     const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function AuthUser(){
   const logout = () => {
     localStorage.removeItem('authUser');
     setAuthUser(null);
+    toast.success('Đăng xuat thành công!'); 
     navigate('/login');
   };
 

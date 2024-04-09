@@ -8,7 +8,6 @@ const EditProduct = () => {
     const [name_pd, setName] = useState('')
     const [image, setImage] = useState(null)
     const [category_id, setCategory_id] = useState('')
-    const [qly, setQly] = useState('')
     const [price, setPrice] = useState('')
     const [expiration_date, setExpirationDate] = useState('')
     const navigate = useNavigate()
@@ -32,7 +31,6 @@ const EditProduct = () => {
         formData.append('image', image);
         formData.append('desc', desc);
         formData.append('name_pd', name_pd);
-        formData.append('qly', qly);
         formData.append('category_id', category_id);
         formData.append('price', price);
         formData.append('expiration_date', expiration_date);
@@ -50,7 +48,6 @@ const EditProduct = () => {
         //     price: price, 
         //     name_pd: name_pd,
         //     category_id: category_id,
-        //     qly: qly,
         //     image: image,
         //     expiration_date: expiration_date,
         // }
@@ -64,7 +61,6 @@ const EditProduct = () => {
             setPrice(response.data.price)
             setName(response.data.name_pd)
             setCategory_id(response.data.category_id)
-            setQly(response.data.qly)
             setExpirationDate(response.data.expiration_date)
         }
         getProductById()
@@ -91,12 +87,6 @@ const EditProduct = () => {
                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">image</label>
                     <input onChange={handleFileChange} type="file"
                            id="image" className="form-control" />
-                </div>
-                <div className="mb-6 form-group">
-                    <label htmlFor="qly"
-                           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantity</label>
-                    <input value={qly} onChange={(e) => setQly(e.target.value)} type="text"
-                           id="qly" className="form-control" required/>
                 </div>
                     <div className="mb-6 form-group">
                         <label htmlFor="category_id"

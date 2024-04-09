@@ -16,7 +16,7 @@ class RoleController extends Controller
 
     public function roleAdd(CreateRoleRQ $request) {
         $data = $request->all();
-        // RoleModel::create($data);
+        RoleModel::create($data);
 
         return response()->json([
             'status' => true,

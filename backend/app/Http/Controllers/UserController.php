@@ -50,11 +50,6 @@ class UserController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-
-        // $user = User::where('email', $request->email)->first();
-        // if (!Hash::check($request->password, $user->password)){
-        //     return ["error " => "email or password error"];
-        // }
     }
 
     public function me()

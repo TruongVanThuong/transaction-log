@@ -1,36 +1,54 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-const endpoint = "http://localhost:8001/api";
+import AuthUser from '../../AuthUser';
+import env from '../../../env';
+import { useNavigate } from "react-router-dom";
+import "./styles.css";
 
 const ShowShop = () => {
+  const { endpoint, endpointApi } = env();
+  const navigate = useNavigate();
   const [shops, setShop] = useState([]);
+  const { authUser } = AuthUser();
 
   useEffect(() => {
     getAllShops();
-    // console.log("load");
-  })
+  }, []);
 
   const getAllShops = async () => {
-    const response = await axios.get(`${endpoint}/shop`);
-    setShop(response.data);
-    // console.log(response.data);
-  }
+    try {
+      const response = await axios.get(`${endpointApi}/shop`);
+      setShop(response.data);
+    } catch (error) {
+      console.error("Error fetching shops:", error);
+    }
+  };
+
+  const handleBuyNow = (product) => {
+    localStorage.setItem('checkoutProduct', JSON.stringify({
+      productId: product.id,
+      user: authUser.id,
+    }));
+    navigate('/checkout');
+  };
 
   return (
-    <>
-    {shops.map((cate) => (
-      <div class="product-box">
-        <img src={`http://localhost:8001/images/products/${shops.image}`} alt={shops.image} 
-        className="w-1rem shadow-2 border-round" style={{width:'100px'}} />;
-        <h2 class="product-title">Tên Sản Phẩm</h2>
-        <p class="product-description">Mô tả sản phẩm sẽ ở đây.</p>
-        <p class="product-price">$100.00</p>
-        <button class="btn-add-to-cart">Thêm vào giỏ hàng</button>
-      </div>
-    ))}
-    </>
-  )
+    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+      {shops.map((shop) => (
+        shop.status !== 0 && (
+          <div key={shop.id} className="product-box" style={{ width: '23%', marginBottom: '20px' }}>
+            <img src={`${endpoint}/images/products/${shop.image}`} alt={shop.image} className="w-1rem shadow-2 border-round" style={{ width: '100px' }} />
+            <h2 className="product-title">{shop.name_pd}</h2>
+            <p className="product-description">{shop.desc}</p>
+            <p className="product-price">{shop.price}</p>
+            <button onClick={() => handleBuyNow(shop)} className="btn btn-primary">
+              Buy now
+            </button>
+          </div>
+        )
+      ))}
+    </div>
+  );
 }
 
 export default ShowShop;

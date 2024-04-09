@@ -14,7 +14,6 @@ class ProductController extends Controller
         $FileName = basename($image->getClientOriginalName());
         $image->move(public_path('/images/products'), $FileName);
         $product['image'] = $FileName;
-        $product['seller_id'] = 5;
         $product['status'] = 1;
         ProductModel::create($product);
         return $product;

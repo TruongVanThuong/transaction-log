@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -35,7 +37,7 @@ Route::group([
 
 
 // middleware AdminAccessMDW ============
-Route::middleware(['AdminAccessMDW'])->group(function () {
+// Route::middleware(['AdminAccessMDW'])->group(function () {
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
 
@@ -67,8 +69,24 @@ Route::middleware(['AdminAccessMDW'])->group(function () {
                 Route::delete('/delete/{id}', 'roleDelete');
             });
         });
+
+        Route::controller(OrderController::class)->group(function () {
+            Route::group(["prefix" => "/order"], function() {
+                Route::get('/', 'orderShow');
+                Route::get('/edit/{id}', 'orderEdit');
+                Route::post('/update/{id}', 'orderUpdate');
+            });
+        });
+
+        Route::controller(TransactionController::class)->group(function () {
+            Route::group(["prefix" => "/transaction"], function() {
+                Route::get('/', 'tranShow');
+                Route::get('/edit/{id}', 'tranEdit');
+                Route::post('/update/{id}', 'tranUpdate');
+            });
+        });
     });
-});
+// });
 // END middleware AdminAccessMDW ============
 
 
@@ -80,5 +98,9 @@ Route::middleware(['AdminAccessMDW'])->group(function () {
 Route::controller(ShopController::class)->group(function () {
     Route::group(["prefix" => "/shop"], function() {
         Route::get('/', 'shopShow');
+        Route::get('/checkout/{id}', 'checkoutShow');
+        Route::post('/checkout', 'checkout');
     });
+
+    Route::get('/order/{id}', 'getOrder');
 });
