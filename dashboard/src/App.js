@@ -14,8 +14,12 @@ import EditCategory from './components/admin/page/category/EditCate'
 import Role from './components/admin/page/role/ShowRole'
 import AddRole from './components/admin/page/role/CreateRole'
 import EditRole from './components/admin/page/role/EditRole'
+import Account from './components/admin/page/account/ShowAcc'
+import AddAcc from './components/admin/page/account/CreateAcc'
+import EditAcc from './components/admin/page/account/EditAcc'
 
 import Shop from './components/client/product/ListProduct'
+import { ToastContainer } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
     const { getAuthUser } = AuthUser();
@@ -65,8 +69,13 @@ function App() {
                 <Route path="/admin/role" element={<Role />} />
                 <Route path="/admin/role/add" element={<AddRole />} />
                 <Route path="/admin/role/edit/:id" element={<EditRole />} />
+                {/* account */}
+                <Route path="/admin/account" element={<Account />} />
+                <Route path="/admin/account/add" element={<AddAcc />} />
+                <Route path="/admin/account/edit/:id" element={<EditAcc />} />
                 
             </Routes>
+            <ToastContainer />
         </div>
      </>
 );

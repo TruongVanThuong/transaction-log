@@ -26,7 +26,7 @@ export default function Login() {
             if (response.ok) {
                 const data = await response.json();
                 setAuthUser(data.user);
-                console.log('Logged in user:', data.user);
+                // console.log('Logged in user:', data.user);
                 toast.success('Đăng nhập thành công!');   
             } else {
                 console.error('Đã xảy ra lỗi:  else');

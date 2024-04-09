@@ -11,21 +11,14 @@ use Illuminate\Support\Facades\Auth;
 
 class AccountController extends Controller
 {
-    public function index()
-    {
-        return view('admin.pages.account.managerAcc');
-    }
-
 
     public function showAcc()
     {
-        $data_acc = User::all();
-        $data_role = RoleModel::all();
-        // $login = Auth::guard('users')->user();
+        $usersWithRoles = User::join('roles', 'users.role', '=', 'roles.number_role')
+            ->select('users.*', 'roles.name_role')
+            ->get();
 
-        $compact = compact('data_acc', 'data_role');
-
-        return response()->json($compact);
+        return $usersWithRoles;
     }
 
     public function addAcc(AccountRequest $request)
@@ -50,11 +43,25 @@ class AccountController extends Controller
         ]);
     }
 
-    public function editAcc(Request $request)
+    public function updateAcc(Request $request)
     {
         $data = $request->all();
         $acc = User::where('id', $request->id)->first();
         $acc->update($data);
+        return response()->json([
+            'status' => true,
+            'message' => 'Cap nhat thành công'
+        ]);
+    }
+
+    public function dashEdit($id ) {
+        $user = User::find($id);
+        return $user;
+    }
+    public function dashUpdate(Request $request, $id ) {
+        $user = User::find($id);
+        $user['wallet'] += $request->payment;
+        $user->save();
         return response()->json([
             'status' => true,
             'message' => 'Cap nhat thành công'
