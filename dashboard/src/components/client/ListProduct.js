@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import AuthUser from '../../AuthUser';
-import env from '../../../env';
+import AuthUser from '../AuthUser';
+import env from '../../env';
 import { useNavigate } from "react-router-dom";
 import "./styles.css";
 
 const ShowShop = () => {
   const { endpoint, endpointApi } = env();
   const navigate = useNavigate();
-  const [shops, setShop] = useState([]);
+  const [shops, setShops] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(6); // Số sản phẩm mỗi trang
   const { authUser } = AuthUser();
 
   useEffect(() => {
@@ -18,7 +20,7 @@ const ShowShop = () => {
   const getAllShops = async () => {
     try {
       const response = await axios.get(`${endpointApi}/shop`);
-      setShop(response.data);
+      setShops(response.data.filter(shop => shop.status !== 0)); // Lọc các cửa hàng có status !== 0
     } catch (error) {
       console.error("Error fetching shops:", error);
     }
@@ -32,10 +34,18 @@ const ShowShop = () => {
     navigate('/checkout');
   };
 
+  // Tính toán index bắt đầu và kết thúc của mảng sản phẩm hiển thị trên trang hiện tại
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = shops.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Logic khi chuyển trang
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-      {shops.map((shop) => (
-        shop.status !== 0 && (
+    <div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+        {currentItems.map((shop) => (
           <div key={shop.id} className="product-box" style={{ width: '23%', marginBottom: '20px' }}>
             <img src={`${endpoint}/images/products/${shop.image}`} alt={shop.image} className="w-1rem shadow-2 border-round" style={{ width: '100px' }} />
             <h2 className="product-title">{shop.name_pd}</h2>
@@ -45,8 +55,16 @@ const ShowShop = () => {
               Buy now
             </button>
           </div>
-        )
-      ))}
+        ))}
+      </div>
+      {/* Phân trang */}
+      <ul className="pagination">
+        {[...Array(Math.ceil(shops.length / itemsPerPage))].map((_, index) => (
+          <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+            <button onClick={() => paginate(index + 1)} className="page-link">{index + 1}</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

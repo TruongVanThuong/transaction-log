@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from "axios";
-import env from '../../../env';
+import env from '../../env';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
@@ -44,10 +44,9 @@ export default function Checkout() {
       if (response.data.success) {
           toast.success(response.data.success);
           localStorage.removeItem('checkoutProduct');
-          navigate('./log');
+          navigate('/log');
       } else if (response.data.error) {
           toast.error(response.data.error);
-          navigate('./log');
       }
     } catch (error) {
         console.error("Error checking out:", error);

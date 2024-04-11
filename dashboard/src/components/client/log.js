@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
-import env from '../../../env';
-import AuthUser from '../../AuthUser';
+import env from '../../env';
+import AuthUser from '../AuthUser';
 
 const GetLog = () => {
   const { authUser } = AuthUser();

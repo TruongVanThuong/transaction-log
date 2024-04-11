@@ -9,43 +9,36 @@ import axios from "axios";
 export default function Dashboard() {
   const { endpointApi } = env();
   const { getAuthUser } = AuthUser();
-  const [userDetail, setUserDetail] = useState(null);
+  const [userID, setUserDetail] = useState(null);
   const [user, setUser] = useState(null);
-  
+  const { authUser} = AuthUser();
+
   const [payment, setPayment] = useState('');
   const handleChange = (e) => {
     setPayment(e.target.value);
   };
-  console.log(payment)
-
-  const GetUser = async () => {
-    if (userDetail && userDetail.id) {
-      try {
-        const response = await axios.get(`${endpointApi}/dashboard/edit/${userDetail.id}`);
-        setUser(response.data);
-      } catch (error) {
-        console.error('Error getting user data:', error);
-      }
-    }
-  };
   
   useEffect(() => {
-    const authUser = getAuthUser();
-    setUserDetail(authUser);
-    console.log(authUser);
-    // Gọi GetUser nếu authUser có tồn tại
-    if (authUser) {
-      GetUser();
-    }
-  
+    GetUser();
   }, []);
+  
+    const GetUser = async () => {
+      if (authUser && authUser.id) {
+        try {
+          const response = await axios.get(`${endpointApi}/dashboard/edit/${authUser.id}`);
+          setUser(response.data);
+        } catch (error) {
+          console.error('Error getting user data:', error);
+        }
+      }
+    };
   
   // Cả getUser và submitForm đều có thể sử dụng được
   const submitForm = async (e) => {
     e.preventDefault();
     try {
-      if (userDetail && userDetail.id) {
-        const response = await axios.put(`${endpointApi}/dashboard/update/${userDetail.id}`, {
+      if (authUser && authUser.id) {
+        const response = await axios.put(`${endpointApi}/dashboard/update/${authUser.id}`, {
           payment: payment
         });
         if (response.data && response.data.status) {
@@ -65,7 +58,7 @@ export default function Dashboard() {
   
 
   return (
-    <div>
+    <div className='container'>
       {user ? (
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
           <div>

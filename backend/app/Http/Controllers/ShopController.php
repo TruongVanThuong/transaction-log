@@ -33,33 +33,18 @@ class ShopController extends Controller
         if ($product->price > $user->wallet) {
             return response()->json(['error' => 'Số dư trong tài khoản không đủ']);
         }
-        // Kiểm tra trạng thái của sản phẩm
-        if ($product->status !== 1) {
-            // Tạo đơn hàng
-            $order = new OrderModel;
-            $order->buyer_id = $request->id_user;
-            $order->product_id = $request->id_product;
-            $order->note = "What is note";
-            $order->status = "Pending";
-            $order->save();
-
-            // Trừ tiền từ tài khoản người dùng
-            $user->wallet -= ($product->price);
-            $user->save();
-
-            return response()->json(
-                ['error' => 'Sản phẩm sẽ được chuyển vào hàng chờ, vì sản phẩm không còn tồn tại hoặc hết hàng!']
-            );
-
-        }
-
 
         // Trừ tiền từ tài khoản người dùng
         $user->wallet -= ($product->price);
         $user->save();
 
-        $product->status = 0;
-        $product->save();
+        $seller = User::find($product->seller_id);
+        if($seller->role == 2 || $seller->role == 1){
+            $product->status = 0;
+            $product->save();
+        } else {
+            $product->delete();
+        }
 
 
 
@@ -92,12 +77,39 @@ class ShopController extends Controller
         $orders = $orders1->getQuery()->union($orders2->getQuery())->orderBy('created_at')->get();
 
         $orders->map(function ($order) {
-            $product = ProductModel::select('name_pd', 'price', 'desc', 'image') // Thay thế 'id', 'name', 'price', 'description' bằng các cột bạn cần
+            $product = ProductModel::withTrashed()
+                ->select('name_pd', 'price', 'desc', 'image') // Thay thế 'id', 'name', 'price', 'description' bằng các cột bạn cần
                 ->where('id', $order->product_id)
                 ->first();
             $order->product = $product;
             return $order;
         });
         return $orders;
+    }
+
+
+
+
+    public function orderDetail(Request $request) {
+        $user = User::find($request->id_user);
+        $product = ProductModel::find($request->id_product);
+
+
+
+        if ($product->price > $user->wallet) {
+            return response()->json(['error' => 'Số dư trong tài khoản không đủ']);
+        }
+        $user->wallet -= $product->price;
+        $user->save();
+
+        $orderDetail['status'] = "Pending";
+        $orderDetail['buyer_id'] = $request->id_user;
+        $orderDetail['product_id'] = $request->id_product;
+        $orderDetail['note'] = $request->note;
+        OrderModel::create($orderDetail);
+        return response()->json([
+            'status' => true,
+            'message' => 'Order success!'
+        ]);
     }
 }
