@@ -77,36 +77,20 @@ Route::group(["prefix" => "/admin"], function () {
         Route::get('/edit/{id}', [AccountController::class, 'editAcc']);
         Route::post('/update/{id}', [AccountController::class, 'updateAcc']);
 
-        Route::controller(OrderController::class)->group(function () {
-            Route::group(["prefix" => "/order"], function () {
-                Route::get('/', 'orderShow');
-                Route::get('/edit/{id}', 'orderEdit');
-                Route::post('/update/{id}', 'orderUpdate');
-            });
+    });
+    Route::controller(OrderController::class)->group(function () {
+        Route::group(["prefix" => "/order"], function () {
+            Route::get('/', 'orderShow');
+            Route::get('/edit/{id}', 'orderEdit');
+            Route::post('/update/{id}', 'orderUpdate');
         });
+    });
 
-        Route::controller(TransactionController::class)->group(function () {
-            Route::group(["prefix" => "/transaction"], function () {
-                Route::get('/', 'tranShow');
-                Route::get('/edit/{id}', 'tranEdit');
-                Route::post('/update/{id}', 'tranUpdate');
-            });
-        });
-
-        Route::controller(OrderController::class)->group(function () {
-            Route::group(["prefix" => "/order"], function () {
-                Route::get('/', 'orderShow');
-                Route::get('/edit/{id}', 'orderEdit');
-                Route::post('/update/{id}', 'orderUpdate');
-            });
-        });
-
-        Route::controller(TransactionController::class)->group(function () {
-            Route::group(["prefix" => "/transaction"], function () {
-                Route::get('/', 'tranShow');
-                Route::get('/edit/{id}', 'tranEdit');
-                Route::post('/update/{id}', 'tranUpdate');
-            });
+    Route::controller(TransactionController::class)->group(function () {
+        Route::group(["prefix" => "/transaction"], function () {
+            Route::get('/', 'tranShow');
+            Route::get('/edit/{id}', 'tranEdit');
+            Route::post('/update/{id}', 'tranUpdate');
         });
     });
 });
@@ -126,6 +110,7 @@ Route::controller(ShopController::class)->group(function () {
         Route::post('/checkout', 'checkout');
     });
     Route::get('/order/{id}', 'getOrder');
+    Route::post('/order-detail', 'orderDetail');
 });
 
 Route::get('/dashboard/edit/{id}', [AccountController::class, 'dashEdit']);

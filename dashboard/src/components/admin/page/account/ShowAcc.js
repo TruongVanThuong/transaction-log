@@ -22,7 +22,7 @@ const GetAccount = () => {
   
   const deleteAccount = async (id) => {
     await axios.delete(`${endpointApi}/account/delete/${id}`);
-    // dataAccount();
+    dataAccount();
   }
   return (
     <div>

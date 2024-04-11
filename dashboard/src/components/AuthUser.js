@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 export default function AuthUser(){
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const getAuthUser = () => {
     const authUserString = localStorage.getItem('authUser');

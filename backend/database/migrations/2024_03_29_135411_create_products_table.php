@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('desc');
             $table->boolean('status');
             $table->dateTime('expiration_date');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
