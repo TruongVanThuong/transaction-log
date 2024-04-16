@@ -8,12 +8,14 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function cateShow() {
+    public function cateShow()
+    {
         $data = CategoryModel::all();
         return $data;
     }
 
-    public function cateAdd(CategoryRequest $request) {
+    public function cateAdd(CategoryRequest $request)
+    {
         $cate = $request->all();
         CategoryModel::create($cate);
         return response()->json([
@@ -22,12 +24,14 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function cateEdit($id) {
+    public function cateEdit($id)
+    {
         $data = CategoryModel::find($id);
         return $data;
     }
 
-    public function cateUpdate(CategoryRequest $request, $id) {
+    public function cateUpdate(CategoryRequest $request, $id)
+    {
         $fieldUpdate = $request->all();
         $product = CategoryModel::find($id);
         $product->update($fieldUpdate);

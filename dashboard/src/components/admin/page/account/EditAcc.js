@@ -8,29 +8,37 @@ import env from '../../../../env';
 
 const EditRole = () => {
   const { endpointApi } = env();
-  const [name_role,setNameRole] = useState('');
-  const [number_role,setNumberRole] = useState('');
-  const [nameRoleError, setNameRoleError] = useState('');
-  const [numberRoleError, setNumberRoleError] = useState('');  
   const navigate = useNavigate()
   const {id} = useParams()
-
-  const handleNameRoleChange = (e) => {
-    setNameRole(e.target.value);
-    setNameRoleError(''); 
-  }
-
-  const handleNumberRoleChange = (e) => {
-    setNumberRole(e.target.value);
-    setNumberRoleError(''); 
-  }
-
+  const [errors, setErrors] = useState({});
+  const [formData, setFormData] = useState({
+    name: '',
+    role: '2',
+    email: '',
+    phone: '',
+    address: '',
+    password: '',
+    again_password: '',
+  });
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
 
   useEffect(() => {
     const GetRoleByID = async () => {
-      const response = await axios.get(`${endpointApi}/edit/${id}`)
-      setNameRole(response.data.name_role)
-      setNumberRole(response.data.number_role)
+      try {
+        const response = await axios.get(`${endpointApi}/admin/account/edit/${id}`);
+        const userData = response.data; 
+        setFormData({
+          name: userData.name,
+          role: userData.role,
+          email: userData.email,
+          phone: userData.phone,
+          address: userData.address,
+        });
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
     }
     GetRoleByID()
   }, [id])
@@ -38,54 +46,108 @@ const EditRole = () => {
   const submitForm = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`${endpointApi}/update/${id}`, {
-          name_role: name_role,
-          number_role: number_role
-      });
-      if (response.data && response.data.status) {
+      const response = await axios.post(`${endpointApi}/admin/account/update/${id}`, formData);
+      if (response.data.status) {
         toast.success(response.data.message);
-        navigate('/admin/role')
+        setFormData({
+          name: '',
+          role: '',
+          email: '',
+          phone: '',
+          address: '',
+        });
+        navigate('/admin/account');
+
       } else {
-        toast.error(' error status ');
+        toast.error(response.data.message);
       }
     } catch (error) {
       if (error.response && error.response.data && error.response.data.errors) {
-        const serverErrors = error.response.data.errors;
-        if (serverErrors.name_role) {
-            setNameRoleError(serverErrors.name_role[0]);
-        }
-        if (serverErrors.number_role) {
-            setNumberRoleError(serverErrors.number_role[0]);
-        }
+          setErrors(error.response.data.errors);
       } else {
-          console.error('Server error:', error);
-          alert('An error occurred. Please try again later.');
+            console.error('Server error:', error);
+            alert('An error occurred. Please try again later.');
       }
     }
   }
 
   return(
     <div className="row justify-content-center pt-5">
-        <div className="col-sm-12">
-            <div className=" p-4">
-                <h1 className="text-center mb-3">Add category</h1>
-                <toast>
-                <div className="form-group">
-                    <label>name role:</label>
-                    <input type="text" className="form-control" placeholder="name role" 
-                      id="name_role" value={name_role} onChange={handleNameRoleChange}/>
-                    {nameRoleError && <span className="text-danger">{nameRoleError}</span>}
-                </div>
-                <div className="form-group">
-                    <label>number role :</label>
-                    <input type="text" className="form-control" placeholder="number role" 
-                      id="number_role" value={number_role} onChange={handleNumberRoleChange}/>
-                    {numberRoleError && <span className="text-danger">{numberRoleError}</span>}
-                </div>
-                </toast>
-                <button type="button" onClick={submitForm} className="btn btn-primary mt-4">Add category</button>
+      <div className="col-sm-12">
+        <div className=" p-4">
+          <h1 className="text-center mb-3">Edit account</h1>
+          <form onSubmit={submitForm}>
+            <div className="form-group">
+              <label htmlFor="name">Name:</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Name"
+                id="name"
+                value={formData.name}
+                onChange={handleChange}
+              />
+                {errors.name && <span className="text-danger">{errors.name}</span>}
+
             </div>
+            <div className="form-group">
+              <label htmlFor="email">Email:</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Email"
+                id="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+                {errors.email && <span className="text-danger">{errors.email}</span>}
+
+            </div>
+            <div className="form-group">
+              <label htmlFor="phone">Phone:</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Phone"
+                id="phone"
+                value={formData.phone}
+                onChange={handleChange}
+              />
+                {errors.phone && <span className="text-danger">{errors.phone}</span>}
+
+            </div>
+            <div className="form-group">
+              <label htmlFor="address">Address:</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Address"
+                id="address"
+                value={formData.address}
+                onChange={handleChange}
+              />
+                {errors.address && <span className="text-danger">{errors.address}</span>}
+            </div>
+            <div className="form-group">
+              <label htmlFor="role">Role:</label>
+              <select
+                id="role"
+                className="form-control"
+                value={formData.role}
+                onChange={handleChange}
+              >
+                <option value="2">Người Trung Gian</option>
+                <option value="3">Người Bán Hàng</option>
+                <option value="4" selected>Khách Hàng</option>
+              </select>
+              {errors.role && <span className="text-danger">{errors.role}</span>}
+            </div>
+            <button type="submit" className="btn btn-primary mt-4">
+              Edit account
+            </button>
+          </form>
         </div>
+      </div>
     </div>
   )
 }

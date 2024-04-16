@@ -36,7 +36,7 @@ export default function Login() {
             console.error('Đã xảy ra lỗi:', error);
             toast.error('Đã xảy ra lỗi khi đăng nhập. Vui lòng thử lại sau.');
         }
-        window.location.reload(navigate('/'));
+        navigate('/');
     }
 
     return(

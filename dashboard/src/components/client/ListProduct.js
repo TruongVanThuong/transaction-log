@@ -10,7 +10,7 @@ const ShowShop = () => {
   const navigate = useNavigate();
   const [shops, setShops] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(6); // Số sản phẩm mỗi trang
+  const [itemsPerPage] = useState(10); // Số sản phẩm mỗi trang
   const { authUser } = AuthUser();
 
   useEffect(() => {
@@ -44,10 +44,12 @@ const ShowShop = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
         {currentItems.map((shop) => (
-          <div key={shop.id} className="product-box" style={{ width: '23%', marginBottom: '20px' }}>
-            <img src={`${endpoint}/images/products/${shop.image}`} alt={shop.image} className="w-1rem shadow-2 border-round" style={{ width: '100px' }} />
+          <div key={shop.id} className="product-box" style={{ marginBottom: '20px' }}>
+            <div className="image-box" >  
+              <img src={`${endpoint}/images/products/${shop.image}`} alt={shop.image} className="w-1rem shadow-2 border-round" />
+            </div>
             <h2 className="product-title">{shop.name_pd}</h2>
             <p className="product-description">{shop.desc}</p>
             <p className="product-price">{shop.price}</p>
@@ -66,6 +68,7 @@ const ShowShop = () => {
         ))}
       </ul>
     </div>
+
   );
 }
 

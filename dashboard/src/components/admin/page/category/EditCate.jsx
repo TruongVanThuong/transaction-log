@@ -2,8 +2,10 @@ import React, {useState, useEffect} from 'react';
 import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
 import { toast } from 'react-toastify';
+import env from '../../../../env';
 
-const endpoint = "http://localhost:8001/api/admin/category";
+const { endpointApi } = env();
+// const endpoint = "http://localhost:8001/api/admin/category";
 
 const EditCate = () => {
   const [name_cate, setNameCate] = useState('')
@@ -13,7 +15,7 @@ const EditCate = () => {
 
   useEffect(() => {
     const GetCateByID = async () => {
-      const response = await axios.get(`${endpoint}/edit/${id}`)
+      const response = await axios.get(`${endpointApi}/admin/category/edit/${id}`)
       setNameCate(response.data.name_cate)
     }
     GetCateByID()
@@ -21,12 +23,9 @@ const EditCate = () => {
 
   const submitForm = async (e) => {
     e.preventDefault();
-    await axios.put(`${endpoint}/update/${id}`, {
-      name_cate: name_cate,
-    })
-    navigate('/admin/category')
+
     try {
-      const response = await axios.put(`${endpoint}/update/${id}`, {
+      const response = await axios.put(`${endpointApi}/admin/category/update/${id}`, {
         name_cate: name_cate,
       });
       if (response.data && response.data.status) {

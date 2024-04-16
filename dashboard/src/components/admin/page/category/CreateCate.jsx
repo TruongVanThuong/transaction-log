@@ -1,21 +1,26 @@
 import React, {useState} from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import env from '../../../../env';
+const { endpointApi } = env();
 
-const endpoint = 'http://localhost:8001/api/admin/category'
+// const endpoint = 'http://localhost:8001/api/admin/category'
 
 const CreateCate = () => {
   const [name_cate,setNameCate] = useState('');
+  const navigate = useNavigate();
   const [name_cate_error, setNameCateError] = useState('');
 
   const submitForm = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${endpoint}/add`, {
+      const response = await axios.post(`${endpointApi}/admin/category/add`, {
         name_cate: name_cate
       });
       if (response.data && response.data.status) {
         toast.success(response.data.message);
+        navigate('/admin/category');
       } else {
         toast.error(' error status ');
       }

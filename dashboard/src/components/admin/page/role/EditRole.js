@@ -3,8 +3,10 @@ import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import env from '../../../../env';
 
-const endpoint = "http://localhost:8001/api/admin/role";
+const { endpointAdmin } = env();
+// const endpoint = "http://localhost:8001/api/admin/role";
 
 const EditRole = () => {
   const [name_role,setNameRole] = useState('');
@@ -27,7 +29,7 @@ const EditRole = () => {
 
   useEffect(() => {
     const GetRoleByID = async () => {
-      const response = await axios.get(`${endpoint}/edit/${id}`)
+      const response = await axios.get(`${endpointAdmin}/role/edit/${id}`)
       setNameRole(response.data.name_role)
       setNumberRole(response.data.number_role)
     }
@@ -37,7 +39,7 @@ const EditRole = () => {
   const submitForm = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`${endpoint}/update/${id}`, {
+      const response = await axios.put(`${endpointAdmin}/role/update/${id}`, {
           name_role: name_role,
           number_role: number_role
       });

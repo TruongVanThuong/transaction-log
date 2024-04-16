@@ -2,9 +2,10 @@ import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 // import {useNavigate} from 'react-router-dom'
 import AuthUser from '../../../AuthUser';
+import env from '../../../../env';
 
-
-const endpoint = 'http://localhost:8001/api/admin/product'
+const { endpointAdmin } = env();
+// const endpoint = 'http://localhost:8001/api/admin/product'
 
 const CreateProduct = () => {
     const [categories, setCategories] = useState([]);
@@ -16,7 +17,7 @@ const CreateProduct = () => {
     }, []);
     
     const getAllCategories = async () => {
-        const response = await axios.get(`http://localhost:8001/api/admin/category`);
+        const response = await axios.get(`${endpointAdmin}/category`);
         setCategories(response.data);
     };
 
@@ -51,7 +52,7 @@ const CreateProduct = () => {
         formData.append('seller_id', idUser);
 
         try {
-            await axios.post(endpoint, formData, {
+            await axios.post(`${endpointAdmin}/product`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
