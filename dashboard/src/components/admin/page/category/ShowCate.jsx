@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Link} from "react-router-dom";
+import env from '../../../../env';
 
-const endpoint = "http://localhost:8001/api/admin";
+// const endpoint = "http://localhost:8001/api/admin";
+const { endpointAdmin } = env();
 
 const ShowCate = () => {
   const [categories, setCategories] = useState([]);
@@ -11,12 +13,12 @@ const ShowCate = () => {
   }, []);
 
   const getAllCategories = async () => {
-    const response = await axios.get(`${endpoint}/category`);
+    const response = await axios.get(`${endpointAdmin}/category`);
     setCategories(response.data);
   };
 
   const deleteCategory = async (id) => {
-    await axios.delete(`${endpoint}/category/delete/${id}`);
+    await axios.delete(`${endpointAdmin}/category/delete/${id}`);
     getAllCategories();
 };
   

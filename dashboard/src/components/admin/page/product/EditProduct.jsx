@@ -1,8 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
+import env from '../../../../env';
 
-const endpoint = "http://localhost:8001/api/admin/product";
+const { endpointAdmin } = env();
+// const endpoint = "http://localhost:8001/api/admin/product";
 const EditProduct = () => {
     const [desc, setDesc] = useState('')
     const [name_pd, setName] = useState('')
@@ -15,7 +17,7 @@ const EditProduct = () => {
     const [categories, setCategories] = useState([]);
 
     const getAllCategories = async () => {
-        const response = await axios.get(`http://localhost:8001/api/admin/category`);
+        const response = await axios.get(`${endpointAdmin}/category`);
         setCategories(response.data);
     };
 
@@ -36,7 +38,7 @@ const EditProduct = () => {
         formData.append('expiration_date', expiration_date);
 
         console.log(formData.get('image'));
-        await axios.post(`${endpoint}/update/${id}` , 
+        await axios.post(`${endpointAdmin}/product/update/${id}` , 
         formData,
         {
             headers: {
@@ -56,7 +58,7 @@ const EditProduct = () => {
     }
     useEffect(() => {
         const getProductById = async () => {
-            const response = await axios.get(`${endpoint}/edit/${id}`)
+            const response = await axios.get(`${endpointAdmin}/product/edit/${id}`)
             setDesc(response.data.desc)
             setPrice(response.data.price)
             setName(response.data.name_pd)

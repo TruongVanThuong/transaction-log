@@ -43,6 +43,19 @@ class AccountController extends Controller
         ]);
     }
 
+    public function editAcc($id)
+    {
+
+        $data = User::leftJoin('roles', 'users.role', '=', 'roles.id')
+        ->select(
+            'users.*',
+            'roles.*',
+        )
+        ->findOrFail($id);
+
+        return $data;
+    }
+
     public function updateAcc(Request $request)
     {
         $data = $request->all();

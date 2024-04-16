@@ -2,8 +2,10 @@ import React, {useState} from "react";
 import Axios from "axios";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import env from '../../../../env';
 
-const endpoint = 'http://localhost:8001/api/admin/role'
+const { endpointAdmin } = env();
+// const endpoint = 'http://localhost:8001/api/admin/role'
 
 const CreateRole = () => {
   const [name_role,setNameRole] = useState('');
@@ -24,7 +26,7 @@ const CreateRole = () => {
   const submitForm = async (e) => {
     e.preventDefault();
     try {
-      const response = await Axios.post(`${endpoint}/add`, {
+      const response = await Axios.post(`${endpointAdmin}/role/add`, {
           name_role: name_role,
           number_role: number_role
       });

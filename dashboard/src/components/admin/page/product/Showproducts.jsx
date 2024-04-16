@@ -4,8 +4,10 @@ import {Link} from "react-router-dom";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
+import env from '../../../../env';
 
-const endpoint = "http://localhost:8001/api/admin";
+const { endpointAdmin } = env();
+// const endpoint = "http://localhost:8001/api/admin";
 
 const ShowProducts = () => {
     const [products, setProducts] = useState([]);
@@ -21,9 +23,9 @@ const ShowProducts = () => {
     }, []);
 
     const getAllProducts = async () => {
-        const response = await axios.get(`${endpoint}/product/show`);
+        const response = await axios.get(`${endpointAdmin}/product/show`);
         setProducts(response.data);
-        const responseCate = await axios.get(`${endpoint}/category`);
+        const responseCate = await axios.get(`${endpointAdmin}/category`);
         setCategories(responseCate.data);
     };
 
@@ -35,7 +37,7 @@ const ShowProducts = () => {
 
     const handleConfirmDelete = async () => {
         try {
-            await axios.delete(`${endpoint}/products/${productIdToDelete}`);
+            await axios.delete(`${endpointAdmin}/products/${productIdToDelete}`);
             getAllProducts();
             setShowModal(false);
         } catch (error) {

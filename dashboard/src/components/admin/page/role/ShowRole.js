@@ -1,8 +1,10 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios"
 import { Link } from "react-router-dom";
+import env from '../../../../env';
 
-const endpoint = "http://localhost:8001/api/admin";
+const { endpointAdmin } = env();
+// const endpoint = "http://localhost:8001/api/admin";
 
 const ShowRole = () => {
   const [roles, setRoles] = useState([])
@@ -12,12 +14,12 @@ const ShowRole = () => {
   }, [])
 
   const getAllRole = async () => {
-    const response = await axios.get(`${endpoint}/role`);
+    const response = await axios.get(`${endpointAdmin}/role`);
     setRoles(response.data);
   }
 
   const deleteRole = async (id) => {
-    await axios.delete(`${endpoint}/role/delete/${id}`);
+    await axios.delete(`${endpointAdmin}/role/delete/${id}`);
     getAllRole();
   }
 
