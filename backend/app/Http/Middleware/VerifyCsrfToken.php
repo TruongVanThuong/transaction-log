@@ -12,8 +12,9 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        'http://localhost:3001/register',
-        'http://localhost:8001/api/register',
-        'http://localhost:8001/api/login',
+        // 'api/*',
+        // 'http://localhost:3001/register',
+        // 'http://localhost:8001/api/register',
+        // 'http://localhost:8001/api/login',
     ];
 }

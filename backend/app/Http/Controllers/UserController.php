@@ -6,14 +6,15 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Cookie;
 
 class UserController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        // $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
 
@@ -42,15 +43,28 @@ class UserController extends Controller
         $kiem_tra = Auth::guard('users')->attempt($login);
         if ($kiem_tra) {
             $tai_khoan = Auth::guard('users')->user();
+            $request->session()->put('user', $tai_khoan);
+            // return $request->session()->get('user');
+            $cookie = Cookie::make('laravel_session', $tai_khoan->api_token, 60 * 24);
             return response()->json([
-                // 'token' => $tai_khoan->createToken('authToken'),
+                // 'token' => $token,
                 'user' => $tai_khoan
-            ]);
+            ])->withCookie($cookie);
+            // return $this->respondWithToken($token);
         } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Tai khoan hoac mat khau khong dung'], 401);
         }
-
     }
+
+    public function datalogin(Request $request)
+    {
+        $request->session()->put('user', 1);
+        echo $request->session()->get('user');
+        // else
+        echo 'No data in the session';
+    }
+
+
 
     public function me()
     {
@@ -75,7 +89,6 @@ class UserController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
             'user' => auth()->user()
         ]);
     }

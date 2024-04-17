@@ -17,7 +17,7 @@ export default function AuthUser(){
   const saveAuthUser = (user) => {
     localStorage.setItem('authUser', JSON.stringify(user));
     setAuthUser(user);
-    navigate('/dashboard');
+    navigate('/');
   };
 
   const logout = () => {

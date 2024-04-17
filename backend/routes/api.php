@@ -22,23 +22,24 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-Route::group([
-    'middleware' => 'api',
-], function ($router) {
+// Route::group([
+//     'middleware' => 'api',
+// ], function ($router) {
 
     Route::post('/register', [UserController::class, 'register']);
-    Route::post('login', [UserController::class, 'login']);
-    Route::post('logout', 'AuthController@logout');
+    Route::post('/login', [UserController::class, 'login']);
+    Route::get('/datalogin', [UserController::class, 'datalogin']);
+    Route::post('/logout', 'AuthController@logout');
 
-});
+// });
 
 
 // middleware AdminAccessMDW ============
-// Route::middleware(['AdminAccessMDW'])->group(function () {
+// Route::middleware(['admin.access'])->group(function () {
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
 

@@ -41,10 +41,14 @@ class Kernel extends HttpKernel
 
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
+            // \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
+            // \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            // 'throttle:60,1',
-            // 'bindings',
+
         ],
     ];
 
@@ -70,6 +74,6 @@ class Kernel extends HttpKernel
     ];
 
     protected $routeMiddleware = [
-        'AdminAccessMDW' => \App\Http\Middleware\AdminAccessMDW::class,
+        'admin.access' => \App\Http\Middleware\AdminAccessMDW::class, // Thêm middleware vào đây
     ];
 }

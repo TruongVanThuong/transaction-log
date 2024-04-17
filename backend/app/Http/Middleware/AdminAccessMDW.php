@@ -16,17 +16,16 @@ class AdminAccessMDW
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $check = Auth::guard('users')->check();
-        if($check) {
-            $user = Auth::guard('users')->user();
-            if($user->role > 3 && $user->role < 1) {
+        if (Auth::guard('web')->check()) {
+            $user = Auth::guard('web')->user();
+            if ($user->role > 3 && $user->role < 1) {
                 // toastr()->error('Tài khoản của bạn không đủ quyền truy cập!');
-                return redirect('/login');
+                return response()->json(['error' => 'Unauthorized access'], 403);
             }
             return $next($request);
         } else {
             // toastr()->warning('Chức năng này yêu cầu phải đăng nhập!');
-            return redirect('/login');
+            return response()->json(['error' => 'Unauthenticated'], 401);
         }
     }
 }

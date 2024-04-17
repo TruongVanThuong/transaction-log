@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::view('/', 'welcome');
+
+
 
 // Route::get('/login', [ProfileController::class, 'loginAdmin']);
 // Route::post('/login-access', [ProfileController::class, 'loginAdminAccess']);
